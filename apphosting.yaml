@@ -1,0 +1,37 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - master # Deploy when changes are pushed to the master branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.13.1" # Specify the Node.js version used in your project
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the React app
+      - name: Build React app
+        run: npm run build
+
+      # Step 5: Deploy to Firebase Hosting
+      - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@v2.2.1
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
